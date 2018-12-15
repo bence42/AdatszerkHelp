@@ -21,15 +21,17 @@ class Rsa {
 	char msg[255], enMsg[255];
 
 	void convertMessage() {
-		strncpy(msg, messageToEncrypt.c_str(), messageToEncrypt.length());
+//		strncpy(msg, messageToEncrypt.c_str(), messageToEncrypt.length());
+		messageToEncrypt.copy(msg, messageToEncrypt.size() + 1);
 		msg[messageToEncrypt.length()] = -1;
 		cout << "\n\nTHE SIMPLE CONVERT IS\n";
 		for (int i = 0; msg[i] != -1; i++)
-					cout << msg[i];
+			cout << msg[i];
 	}
 
 	void convertEnMessage() {
-		strncpy(enMsg, messageToDecrypt.c_str(), messageToDecrypt.length());
+//		strncpy(enMsg, messageToDecrypt.c_str(), messageToDecrypt.length());
+		messageToDecrypt.copy(enMsg, messageToDecrypt.size() + 1);
 		enMsg[messageToDecrypt.length()] = -1;
 		cout << "\n\nTHE ENCRYPTED CONVERT IS\n";
 		for (int i = 0; enMsg[i] != -1; i++)
@@ -78,10 +80,9 @@ class Rsa {
 
 public:
 	long int publicKey[50];
-	Rsa(std::string _nameOfClient, int _primeNumber,
-			int _anotherPrimeNumber) :
-			nameOfClient(_nameOfClient), primeNumber(
-					_primeNumber), anotherPrimeNumber(_anotherPrimeNumber) {
+	Rsa(std::string _nameOfClient, int _primeNumber, int _anotherPrimeNumber) :
+			nameOfClient(_nameOfClient), primeNumber(_primeNumber), anotherPrimeNumber(
+					_anotherPrimeNumber) {
 		t = (primeNumber - 1) * (anotherPrimeNumber - 1);
 		n = primeNumber * anotherPrimeNumber;
 		encryption_key();
@@ -90,21 +91,28 @@ public:
 	std::string sendMessage(long int _publicKey[],
 			std::string _messageToEncrypt) {
 		messageToEncrypt = _messageToEncrypt;
+		cout << "halo irj ki";
+		cout << _publicKey[0];
 		convertMessage();
 		encrypt(_publicKey);
-		std::string result(enMsg);
-		cout << "\n\nTHE SENT MESSAGE IS\n";
-				for (int i = 0; enMsg[i] != -1; i++)
-					cout << enMsg[i];
-		result.pop_back();
+		std::string result = "";
+		for (int i = 0; enMsg[i] != -1; i++)
+			result += enMsg[i];
+
 		cout << "\n\nRESULT IS\n";
-		cout << result;
+				cout << result;
+		cout << "\n\nTHE SENT MESSAGE IS\n";
+		for (int i = 0; enMsg[i] != -1; i++)
+			cout << enMsg[i];
 		return result;
 	}
 
 	void receiveMessage(std::string _encryptedMessage) {
 		messageToDecrypt = _encryptedMessage;
 		convertEnMessage();
+		std::string temp(enMsg);
+		cout << "\n\nenMsg in string IS\n";
+		cout << temp;
 		decrypt();
 	}
 
@@ -136,6 +144,9 @@ public:
 
 	//function to decrypt the message
 	void decrypt() {
+		cout << "\n\ndecrypt fv\n";
+				for (int i = 0; enMsg[i] != -1; i++)
+					cout << enMsg[i];
 		long int pt, ct, key = privateKey[0], k;
 		int i = 0;
 		while (enMsg[i] != -1) {
@@ -159,8 +170,9 @@ public:
 };
 
 int main() {
-	Rsa alice ("Alice", 13, 17);
-	Rsa bob ("Bob", 5, 7);
+	Rsa alice("Alice", 13, 17);
+	Rsa bob("Bob", 5, 7);
+	cout << alice.publicKey[0];
 	std::string en = bob.sendMessage(alice.publicKey, "ligma");
 	alice.receiveMessage(en);
 //	Rsa rsa;
