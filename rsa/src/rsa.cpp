@@ -14,15 +14,10 @@
 
 using namespace std;
 
-//int x, y, n, t, i, flag;
-//long int e[50] public, d[50] private, temp[50], j;
-//char en[50], m[50];
-//char msg[100];
-
 class Rsa {
 	std::string nameOfClient, messageToEncrypt, messageToDecrypt;
 	int primeNumber, anotherPrimeNumber, t, n;
-	long int temp[50], publicKey[50], privateKey[50];
+	long int temp[50], privateKey[50];
 	char msg[255], enMsg[255];
 
 	void convertMessage() {
@@ -82,6 +77,7 @@ class Rsa {
 	}
 
 public:
+	long int publicKey[50];
 	Rsa(std::string _nameOfClient, int _primeNumber,
 			int _anotherPrimeNumber) :
 			nameOfClient(_nameOfClient), primeNumber(
@@ -96,11 +92,14 @@ public:
 		messageToEncrypt = _messageToEncrypt;
 		convertMessage();
 		encrypt(_publicKey);
-		std::string temp;
-		temp.clear();
-		for (int i = 0; enMsg[i] != -1; i++)
-			temp += enMsg[i];
-		return temp;
+		std::string result(enMsg);
+		cout << "\n\nTHE SENT MESSAGE IS\n";
+				for (int i = 0; enMsg[i] != -1; i++)
+					cout << enMsg[i];
+		result.pop_back();
+		cout << "\n\nRESULT IS\n";
+		cout << result;
+		return result;
 	}
 
 	void receiveMessage(std::string _encryptedMessage) {
@@ -113,7 +112,8 @@ public:
 	void encrypt(long int _publicKey[]) {
 		long int pt, ct, key = _publicKey[0], k, len;
 		int i = 0;
-		len = strlen(msg);
+//		len = strlen(msg);
+		len = messageToEncrypt.length();
 
 		while (i != len) {
 			pt = msg[i];
@@ -156,16 +156,13 @@ public:
 
 		cout << endl;
 	}
-
-	long int* getPublicKey() {
-		return publicKey;
-	}
 };
 
 int main() {
-	Rsa* alice = new Rsa("Alice", 13, 17);
-	Rsa* bob = new Rsa("Bob", 5, 7);
-	alice->receiveMessage(bob->sendMessage(alice->getPublicKey(), "ligma"));
+	Rsa alice ("Alice", 13, 17);
+	Rsa bob ("Bob", 5, 7);
+	std::string en = bob.sendMessage(alice.publicKey, "ligma");
+	alice.receiveMessage(en);
 //	Rsa rsa;
 //   cout << "\nENTER FIRST PRIME NUMBER\n";
 //   cin >> x;
