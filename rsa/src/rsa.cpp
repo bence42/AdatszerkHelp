@@ -54,28 +54,22 @@ public:
 			std::string _messageToEncrypt, Server* _srv) {
 		messageToEncrypt = _messageToEncrypt;
 		_srv->addMessage(nameOfClient, _messageToEncrypt);
-		std::cout << "halo irj ki";
-		std::cout << _publicKey[0];
 		convertMessage();
 		encrypt(_publicKey, _temp);
 		std::string result = "";
 		for (int i = 0; enMsg[i] != -1; i++)
 			result += enMsg[i];
-
-		std::cout << "\n\nRESULT IS\n";
-		std::cout << result;
-		std::cout << "\n\nTHE SENT MESSAGE IS\n";
-		for (int i = 0; enMsg[i] != -1; i++)
-			std::cout << enMsg[i];
 		return result;
 	}
 
 	void receiveMessage(std::string _encryptedMessage) {
 		messageToDecrypt = _encryptedMessage;
 		convertEnMessage();
-		std::string temp(enMsg);
+		std::string tempStr = "";
 		std::cout << "\n\nenMsg in string IS\n";
-		std::cout << temp;
+		for (int i = 0; enMsg[i] != -1; i++)
+			tempStr += enMsg[i];
+		std::cout << tempStr;
 		decrypt();
 	}
 
@@ -106,7 +100,7 @@ public:
 
 	void decrypt() {
 		convertEnMessage();
-		std::cout << "\n\ndecrypt fv\n";
+		std::cout << "\n\nenMsg values in decrypt\n";
 		for (int i = 0; enMsg[i] != -1; i++)
 			std::cout << enMsg[i];
 		long int pt, ct, key = privateKey[0], k;
@@ -204,14 +198,14 @@ private:
 int main() {
 	Rsa alice("Alice", 13, 17);
 	Rsa bob("Bob", 5, 7);
+
 	Server* srv = new Server();
-//	alice.setMessageToEncrypt("hello");
-//	alice.encrypt(alice.publicKey);
-//	alice.setMessageToDecrypt("œ//s");
-//	alice.decrypt();
-	std::cout << alice.publicKey[0];
+
 	std::string en = bob.sendMessage(alice.publicKey, alice.temp, "hello", srv);
 	alice.receiveMessage(en);
+
+	std::cout << "\n";
+	std::cout << "Messages stored by the server:" <<std::endl;
 	srv->listAllMessages();
 }
 
