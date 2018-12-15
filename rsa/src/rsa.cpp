@@ -9,6 +9,32 @@
 #include<iostream>
 #include<math.h>
 #include<string>
+#include<map>
+#include <chrono>
+#include <ctime>
+#include <utility>
+
+class Server {
+	std::map<long int, std::pair<std::string, std::string>> messages;
+
+public:
+	Server() {
+		messages.clear();
+	}
+
+	void listAllMessages() {
+		for (std::map<long int, std::pair<std::string, std::string>>::iterator it = messages.begin(); it != messages.end(); ++it)
+		{
+			std::cout << std::ctime(&it->first) << " - " << it->second.first << " : " << it->second.second << std::endl;
+		}
+	}
+
+	void addMessage(std::string sender, std::string message) {
+		std::pair <std::string, std::string> tmpPair(sender, message);
+		messages.insert({std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()), tmpPair});
+	}
+
+};
 
 class Rsa {
 public:
@@ -22,8 +48,9 @@ public:
 	}
 
 	std::string sendMessage(long int _publicKey[], long int _temp[],
-			std::string _messageToEncrypt) {
+			std::string _messageToEncrypt, Server* _srv) {
 		messageToEncrypt = _messageToEncrypt;
+		_srv->addMessage(nameOfClient, _messageToEncrypt);
 		std::cout << "halo irj ki";
 		std::cout << _publicKey[0];
 		convertMessage();
@@ -178,12 +205,14 @@ private:
 int main() {
 	Rsa alice("Alice", 13, 17);
 	Rsa bob("Bob", 5, 7);
+	Server* srv = new Server();
 //	alice.setMessageToEncrypt("hello");
 //	alice.encrypt(alice.publicKey);
 //	alice.setMessageToDecrypt("œ//s");
 //	alice.decrypt();
 	std::cout << alice.publicKey[0];
-	std::string en = bob.sendMessage(alice.publicKey, alice.temp, "hello");
+	std::string en = bob.sendMessage(alice.publicKey, alice.temp, "hello", srv);
 	alice.receiveMessage(en);
+	srv->listAllMessages();
 }
 
