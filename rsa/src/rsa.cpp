@@ -23,15 +23,18 @@ public:
 	}
 
 	void listAllMessages() {
-		for (std::map<long int, std::pair<std::string, std::string>>::iterator it = messages.begin(); it != messages.end(); ++it)
-		{
-			std::cout << std::ctime(&it->first) << " - " << it->second.first << " : " << it->second.second << std::endl;
+		for (std::map<long int, std::pair<std::string, std::string>>::iterator it =
+				messages.begin(); it != messages.end(); ++it) {
+			std::cout << std::ctime(&it->first) << " - " << it->second.first
+					<< " : " << it->second.second << std::endl;
 		}
 	}
 
 	void addMessage(std::string sender, std::string message) {
-		std::pair <std::string, std::string> tmpPair(sender, message);
-		messages.insert({std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()), tmpPair});
+		std::pair<std::string, std::string> tmpPair(sender, message);
+		messages.insert(
+				{ std::chrono::system_clock::to_time_t(
+						std::chrono::system_clock::now()), tmpPair });
 	}
 
 };
@@ -80,7 +83,6 @@ public:
 		convertMessage();
 		long int pt, ct, key = _publicKey[0], k, len;
 		int i = 0;
-//		len = strlen(msg);
 		len = messageToEncrypt.length();
 
 		while (i != len) {
@@ -143,7 +145,6 @@ private:
 	char msg[255], enMsg[255];
 
 	void convertMessage() {
-		//		strncpy(msg, messageToEncrypt.c_str(), messageToEncrypt.length());
 		messageToEncrypt.copy(msg, messageToEncrypt.size() + 1);
 		msg[messageToEncrypt.length()] = -1;
 		std::cout << "\n\nTHE SIMPLE CONVERT IS\n";
@@ -152,7 +153,6 @@ private:
 	}
 
 	void convertEnMessage() {
-		//		strncpy(enMsg, messageToDecrypt.c_str(), messageToDecrypt.length());
 		messageToDecrypt.copy(enMsg, messageToDecrypt.size() + 1);
 		enMsg[messageToDecrypt.length()] = -1;
 		std::cout << "\n\nTHE ENCRYPTED CONVERT IS\n";
@@ -169,7 +169,6 @@ private:
 		return 1;
 	}
 
-	//function to generate encryption key
 	void encryption_key() {
 		int k;
 		k = 0;
