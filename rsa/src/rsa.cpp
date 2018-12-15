@@ -6,36 +6,131 @@
 // Description : Hello World in C++, Ansi-style
 //============================================================================
 
-//C++ program for encryption and decryption
 #include<iostream>
-#include<stdlib.h>
 #include<math.h>
-#include<string.h>
-
-using namespace std;
+#include<string>
 
 class Rsa {
+public:
+	long int publicKey[50], temp[50];
+	Rsa(std::string _nameOfClient, int _primeNumber, int _anotherPrimeNumber) :
+			nameOfClient(_nameOfClient), primeNumber(_primeNumber), anotherPrimeNumber(
+					_anotherPrimeNumber) {
+		t = (primeNumber - 1) * (anotherPrimeNumber - 1);
+		n = primeNumber * anotherPrimeNumber;
+		encryption_key();
+	}
+
+	std::string sendMessage(long int _publicKey[], long int _temp[],
+			std::string _messageToEncrypt) {
+		messageToEncrypt = _messageToEncrypt;
+		std::cout << "halo irj ki";
+		std::cout << _publicKey[0];
+		convertMessage();
+		encrypt(_publicKey, _temp);
+		std::string result = "";
+		for (int i = 0; enMsg[i] != -1; i++)
+			result += enMsg[i];
+
+		std::cout << "\n\nRESULT IS\n";
+		std::cout << result;
+		std::cout << "\n\nTHE SENT MESSAGE IS\n";
+		for (int i = 0; enMsg[i] != -1; i++)
+			std::cout << enMsg[i];
+		return result;
+	}
+
+	void receiveMessage(std::string _encryptedMessage) {
+		messageToDecrypt = _encryptedMessage;
+		convertEnMessage();
+		std::string temp(enMsg);
+		std::cout << "\n\nenMsg in string IS\n";
+		std::cout << temp;
+		decrypt();
+	}
+
+	void encrypt(long int _publicKey[], long int _temp[]) {
+		convertMessage();
+		long int pt, ct, key = _publicKey[0], k, len;
+		int i = 0;
+//		len = strlen(msg);
+		len = messageToEncrypt.length();
+
+		while (i != len) {
+			pt = msg[i];
+			pt = pt - 96;
+			k = 1;
+			for (int j = 0; j < key; j++) {
+				k = k * pt;
+				k = k % n;
+			}
+			_temp[i] = k;
+			ct = k + 96;
+			enMsg[i] = ct;
+			i++;
+		}
+		enMsg[i] = -1;
+		std::cout << "\n\nTHE ENCRYPTED MESSAGE IS\n";
+		for (i = 0; enMsg[i] != -1; i++)
+			std::cout << enMsg[i];
+	}
+
+	void decrypt() {
+		convertEnMessage();
+		std::cout << "\n\ndecrypt fv\n";
+		for (int i = 0; enMsg[i] != -1; i++)
+			std::cout << enMsg[i];
+		long int pt, ct, key = privateKey[0], k;
+		int i = 0;
+		while (enMsg[i] != -1) {
+			ct = temp[i];
+			k = 1;
+			for (int j = 0; j < key; j++) {
+				k = k * ct;
+				k = k % n;
+			}
+			pt = k + 96;
+			msg[i] = pt;
+			i++;
+		}
+		msg[i] = -1;
+		std::cout << "\n\nTHE DECRYPTED MESSAGE IS\n";
+		for (i = 0; msg[i] != -1; i++)
+			std::cout << msg[i];
+
+		std::cout << std::endl;
+	}
+
+	void setMessageToDecrypt(std::string message) {
+		messageToDecrypt = message;
+	}
+
+	void setMessageToEncrypt(std::string message) {
+		messageToEncrypt = message;
+	}
+
+private:
 	std::string nameOfClient, messageToEncrypt, messageToDecrypt;
 	int primeNumber, anotherPrimeNumber, t, n;
-	long int temp[50], privateKey[50];
+	long int privateKey[50];
 	char msg[255], enMsg[255];
 
 	void convertMessage() {
-//		strncpy(msg, messageToEncrypt.c_str(), messageToEncrypt.length());
+		//		strncpy(msg, messageToEncrypt.c_str(), messageToEncrypt.length());
 		messageToEncrypt.copy(msg, messageToEncrypt.size() + 1);
 		msg[messageToEncrypt.length()] = -1;
-		cout << "\n\nTHE SIMPLE CONVERT IS\n";
+		std::cout << "\n\nTHE SIMPLE CONVERT IS\n";
 		for (int i = 0; msg[i] != -1; i++)
-			cout << msg[i];
+			std::cout << msg[i];
 	}
 
 	void convertEnMessage() {
-//		strncpy(enMsg, messageToDecrypt.c_str(), messageToDecrypt.length());
+		//		strncpy(enMsg, messageToDecrypt.c_str(), messageToDecrypt.length());
 		messageToDecrypt.copy(enMsg, messageToDecrypt.size() + 1);
 		enMsg[messageToDecrypt.length()] = -1;
-		cout << "\n\nTHE ENCRYPTED CONVERT IS\n";
+		std::cout << "\n\nTHE ENCRYPTED CONVERT IS\n";
 		for (int i = 0; enMsg[i] != -1; i++)
-			cout << enMsg[i];
+			std::cout << enMsg[i];
 	}
 
 	int prime(long int pr) {
@@ -78,141 +173,17 @@ class Rsa {
 		}
 	}
 
-public:
-	long int publicKey[50];
-	Rsa(std::string _nameOfClient, int _primeNumber, int _anotherPrimeNumber) :
-			nameOfClient(_nameOfClient), primeNumber(_primeNumber), anotherPrimeNumber(
-					_anotherPrimeNumber) {
-		t = (primeNumber - 1) * (anotherPrimeNumber - 1);
-		n = primeNumber * anotherPrimeNumber;
-		encryption_key();
-	}
-
-	std::string sendMessage(long int _publicKey[],
-			std::string _messageToEncrypt) {
-		messageToEncrypt = _messageToEncrypt;
-		cout << "halo irj ki";
-		cout << _publicKey[0];
-		convertMessage();
-		encrypt(_publicKey);
-		std::string result = "";
-		for (int i = 0; enMsg[i] != -1; i++)
-			result += enMsg[i];
-
-		cout << "\n\nRESULT IS\n";
-				cout << result;
-		cout << "\n\nTHE SENT MESSAGE IS\n";
-		for (int i = 0; enMsg[i] != -1; i++)
-			cout << enMsg[i];
-		return result;
-	}
-
-	void receiveMessage(std::string _encryptedMessage) {
-		messageToDecrypt = _encryptedMessage;
-		convertEnMessage();
-		std::string temp(enMsg);
-		cout << "\n\nenMsg in string IS\n";
-		cout << temp;
-		decrypt();
-	}
-
-	//function to encrypt the message
-	void encrypt(long int _publicKey[]) {
-		long int pt, ct, key = _publicKey[0], k, len;
-		int i = 0;
-//		len = strlen(msg);
-		len = messageToEncrypt.length();
-
-		while (i != len) {
-			pt = msg[i];
-			pt = pt - 96;
-			k = 1;
-			for (int j = 0; j < key; j++) {
-				k = k * pt;
-				k = k % n;
-			}
-			temp[i] = k;
-			ct = k + 96;
-			enMsg[i] = ct;
-			i++;
-		}
-		enMsg[i] = -1;
-		cout << "\n\nTHE ENCRYPTED MESSAGE IS\n";
-		for (i = 0; enMsg[i] != -1; i++)
-			cout << enMsg[i];
-	}
-
-	//function to decrypt the message
-	void decrypt() {
-		cout << "\n\ndecrypt fv\n";
-				for (int i = 0; enMsg[i] != -1; i++)
-					cout << enMsg[i];
-		long int pt, ct, key = privateKey[0], k;
-		int i = 0;
-		while (enMsg[i] != -1) {
-			ct = temp[i];
-			k = 1;
-			for (int j = 0; j < key; j++) {
-				k = k * ct;
-				k = k % n;
-			}
-			pt = k + 96;
-			msg[i] = pt;
-			i++;
-		}
-		msg[i] = -1;
-		cout << "\n\nTHE DECRYPTED MESSAGE IS\n";
-		for (i = 0; msg[i] != -1; i++)
-			cout << msg[i];
-
-		cout << endl;
-	}
 };
 
 int main() {
 	Rsa alice("Alice", 13, 17);
 	Rsa bob("Bob", 5, 7);
-	cout << alice.publicKey[0];
-	std::string en = bob.sendMessage(alice.publicKey, "ligma");
+//	alice.setMessageToEncrypt("hello");
+//	alice.encrypt(alice.publicKey);
+//	alice.setMessageToDecrypt("œ//s");
+//	alice.decrypt();
+	std::cout << alice.publicKey[0];
+	std::string en = bob.sendMessage(alice.publicKey, alice.temp, "hello");
 	alice.receiveMessage(en);
-//	Rsa rsa;
-//   cout << "\nENTER FIRST PRIME NUMBER\n";
-//   cin >> x;
-//
-//   //checking whether input is prime or not
-//   flag = rsa.prime(x);
-//   if(flag == 0)
-//   {
-//      cout << "\nINVALID INPUT\n";
-//      exit(0);
-//   }
-//
-//   cout << "\nENTER SECOND PRIME NUMBER\n";
-//   cin >> y;
-//
-//   flag = rsa.prime(y);
-//   if(flag == 0 || x == y)
-//   {
-//      cout << "\nINVALID INPUT\n";
-//      exit(0);
-//   }
-//
-//   cout << "\nENTER MESSAGE OR STRING TO ENCRYPT\n";
-//   cin >> msg;
-//
-//   for(i = 0; msg[i] != 0; i++)
-//      m[i] = msg[i];
-//   n = x * y;
-//   t = (x - 1) * (y - 1);
-//
-//   rsa.encryption_key();
-//   cout << "\nPOSSIBLE VALUES OF e AND d ARE\n";
-//
-//   for(i = 0; i < j - 1; i++)
-//      cout << "\n" << e[i] << "\t" << d[i];
-//
-//   rsa.encrypt();
-//   rsa.decrypt();
-//   return 0;
-} //end of the main program
+}
 
