@@ -1,0 +1,7 @@
+[
+{
+  "directory": "D:/workspace/github/AdatszerkHelp/2019/khf03/build",
+  "command": "D:\\workspace\\mingw-w64\\x86_64-8.1.0-win32-seh-rt_v6-rev0\\mingw64\\bin\\g++.exe     -Wall -Wextra -pedantic -Werror -O2 -g -DNDEBUG   -std=gnu++17 -o CMakeFiles\\heavyhitters.dir\\main.cpp.obj -c D:\\workspace\\github\\AdatszerkHelp\\2019\\khf03\\main.cpp",
+  "file": "D:/workspace/github/AdatszerkHelp/2019/khf03/main.cpp"
+}
+]

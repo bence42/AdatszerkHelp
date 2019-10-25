@@ -1,0 +1,3 @@
+D:/workspace/github/AdatszerkHelp/2019/khf03/build/CMakeFiles/heavyhitters.dir
+D:/workspace/github/AdatszerkHelp/2019/khf03/build/CMakeFiles/edit_cache.dir
+D:/workspace/github/AdatszerkHelp/2019/khf03/build/CMakeFiles/rebuild_cache.dir
